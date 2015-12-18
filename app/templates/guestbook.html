@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Guestbook Demo</title>
+  </head>
+  <body>
+    <form action="/" method="post">
+      <div><input type="text" name="Author"></div>
+      <div><textarea name="Content" rows="3" cols="60"></textarea></div>
+      <div><input type="submit" value="Sign Guestbook"></div>
+    </form>
+
+    {{range .Greetings }}
+    <p>
+      {{with .Author}}<b>{{.}}</b>{{else}}An anonymous person{{end}}
+      on <em>{{.Date.Format "3:04pm, Mon 2 Jan"}}</em>
+      wrote <blockquote>{{.Content}}</blockquote>
+    </p>
+    {{end}}
+  </body>
+</html>
