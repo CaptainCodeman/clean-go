@@ -3,7 +3,6 @@ package mongodb
 import (
 	"time"
 
-	"golang.org/x/net/context"
 	"gopkg.in/mgo.v2"
 
 	"github.com/captaincodeman/clean/engine"
@@ -21,7 +20,7 @@ func NewStorage(url string) engine.StorageFactory {
 	return &storageFactory{session}
 }
 
-func (f *storageFactory) GetGreetingRepository(c context.Context) engine.GreetingRepository {
+func (f *storageFactory) NewGreetingRepository() engine.GreetingRepository {
 	return NewGreetingRepository(f.session)
 }
 

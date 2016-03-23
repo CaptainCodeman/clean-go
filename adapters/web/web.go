@@ -3,26 +3,26 @@ package web
 import (
 	"net/http"
 
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/gin-gonic/gin"
 
 	"github.com/captaincodeman/clean/engine"
 )
 
-type (
-	adapter struct {
-		engine.EngineFactory
+func init() {
+	gin.SetMode(gin.ReleaseMode)
+}
+
+func NewWebAdapter(f engine.EngineFactory, log bool) http.Handler {
+	var e *gin.Engine
+	if log {
+		e = gin.Default()
+	} else {
+		e = gin.New()
 	}
-)
 
-func NewWebAdapter(f engine.EngineFactory) http.Handler {
-	a := &adapter{f}
-	e := echo.New()
+	e.LoadHTMLGlob("templates/*")
 
-	e.Use(middleware.Logger())
-	e.SetRenderer(NewTemplate())
-
-	initGreetings(e, a, "/")
+	initGreetings(e, f, "/")
 
 	return e
 }

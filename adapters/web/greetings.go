@@ -4,27 +4,27 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/labstack/echo"
-	"golang.org/x/net/context"
+	"github.com/gin-gonic/gin"
 
 	"github.com/captaincodeman/clean/engine"
 )
 
 type (
-	greeter func(context.Context) *engine.Greeter
+	greeter struct {
+		engine.Greeter
+	}
 )
 
-func initGreetings(e *echo.Echo, a *adapter, endpoint string) {
+func initGreetings(e *gin.Engine, f engine.EngineFactory, endpoint string) {
+	greeter := &greeter{f.NewGreeter()}
 	g := e.Group(endpoint)
-	g.Get("", a.Greeter().List)
-	g.Post("", a.Greeter().Add)
+	{
+		g.GET("", greeter.list)
+		g.POST("", greeter.add)
+	}
 }
 
-func (a *adapter) Greeter() greeter {
-	return a.GetGreeter
-}
-
-func (g greeter) List(c *echo.Context) error {
+func (g greeter) list(c *gin.Context) {
 	count, err := strconv.Atoi(c.Query("count"))
 	if err != nil || count == 0 {
 		count = 5
@@ -32,20 +32,20 @@ func (g greeter) List(c *echo.Context) error {
 	req := &engine.ListGreetingsRequest{
 		Count: count,
 	}
-	res := g(c).List(req)
+	res := g.List(ctx(c), req)
 	if c.Query("format") == "json" {
-		return c.JSONIndent(http.StatusOK, res.Greetings, "", "  ")
+		c.JSON(http.StatusOK, res.Greetings)
 	} else {
-		return c.Render(http.StatusOK, "guestbook.html", res)
+		c.HTML(http.StatusOK, "guestbook.html", res)
 	}
 }
 
-func (g greeter) Add(c *echo.Context) error {
+func (g greeter) add(c *gin.Context) {
 	req := &engine.AddGreetingRequest{
-		Author:  c.Form("Author"),
-		Content: c.Form("Content"),
+		Author:  c.PostForm("Author"),
+		Content: c.PostForm("Content"),
 	}
-	g(c).Add(req)
-	// TODO: set flash cookie
-	return c.Redirect(http.StatusFound, "/")
+	g.Add(ctx(c), req)
+	// TODO: set flash cookie for "added"
+	c.Redirect(http.StatusFound, "/")
 }

@@ -13,5 +13,5 @@ import (
 func main() {
 	s := mongodb.NewStorage(config.MongoURL)
 	e := engine.NewEngine(s)
-	http.ListenAndServe(":8080", web.NewWebAdapter(e))
+	http.ListenAndServe(":8080", web.NewWebAdapter(e, true))
 }

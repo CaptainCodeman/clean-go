@@ -17,6 +17,6 @@ func NewGreeting(author, content string) *Greeting {
 	return &Greeting{
 		Author:  author,
 		Content: content,
-		Date:    Now(),
+		Date:    now(),
 	}
 }

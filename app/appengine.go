@@ -13,5 +13,5 @@ import (
 func init() {
 	s := appengine.NewStorage()
 	e := engine.NewEngine(s)
-	http.Handle("/", web.NewWebAdapter(e))
+	http.Handle("/", web.NewWebAdapter(e, false))
 }

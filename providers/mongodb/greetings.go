@@ -1,6 +1,7 @@
 package mongodb
 
 import (
+	"golang.org/x/net/context"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
@@ -26,24 +27,24 @@ func NewGreetingRepository(session *mgo.Session) engine.GreetingRepository {
 	return &greetingRepository{session}
 }
 
-func (r greetingRepository) Put(g *domain.Greeting) {
+func (r greetingRepository) Put(c context.Context, g *domain.Greeting) {
 	s := r.session.Clone()
 	defer s.Close()
 
-	c := s.DB("").C(greetingCollection)
+	col := s.DB("").C(greetingCollection)
 	if g.ID == 0 {
 		g.ID = getNextSequence(s, greetingCollection)
 	}
-	c.Upsert(bson.M{"_id": g.ID}, g)
+	col.Upsert(bson.M{"_id": g.ID}, g)
 }
 
-func (r greetingRepository) List(query *engine.Query) []*domain.Greeting {
+func (r greetingRepository) List(c context.Context, query *engine.Query) []*domain.Greeting {
 	s := r.session.Clone()
 	defer s.Close()
 
-	c := s.DB("").C(greetingCollection)
+	col := s.DB("").C(greetingCollection)
 	g := []*domain.Greeting{}
-	q := translateQuery(c, query)
+	q := translateQuery(col, query)
 	q.All(&g)
 
 	return g

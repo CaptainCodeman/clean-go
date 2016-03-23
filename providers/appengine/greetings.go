@@ -13,9 +13,7 @@ import (
 )
 
 type (
-	greetingRepository struct {
-		context.Context
-	}
+	greetingRepository struct{}
 
 	greeting struct {
 		domain.Greeting
@@ -26,22 +24,22 @@ var (
 	greetingKind = "greeting"
 )
 
-func NewGreetingRepository(c context.Context) engine.GreetingRepository {
-	return &greetingRepository{c}
+func NewGreetingRepository() engine.GreetingRepository {
+	return &greetingRepository{}
 }
 
-func (r greetingRepository) Put(g *domain.Greeting) {
+func (r greetingRepository) Put(c context.Context, g *domain.Greeting) {
 	d := &greeting{*g}
-	k := datastore.NewIncompleteKey(r.Context, greetingKind, greetingEntityKey(r.Context))
-	datastore.Put(r.Context, k, d)
+	k := datastore.NewIncompleteKey(c, greetingKind, greetingEntityKey(c))
+	datastore.Put(c, k, d)
 }
 
-func (r greetingRepository) List(query *engine.Query) []*domain.Greeting {
+func (r greetingRepository) List(c context.Context, query *engine.Query) []*domain.Greeting {
 	g := []*greeting{}
 	q := translateQuery(greetingKind, query)
-	q = q.Ancestor(greetingEntityKey(r.Context))
+	q = q.Ancestor(greetingEntityKey(c))
 
-	k , _ := q.GetAll(r.Context, &g)
+	k, _ := q.GetAll(c, &g)
 	o := make([]*domain.Greeting, len(g))
 	for i, _ := range g {
 		o[i] = &g[i].Greeting
@@ -57,12 +55,12 @@ func greetingEntityKey(c context.Context) *datastore.Key {
 func (x *greeting) Load(props []datastore.Property) error {
 	for _, prop := range props {
 		switch prop.Name {
-			case "author":
-				x.Author = prop.Value.(string)
-			case "content":
-				x.Content = prop.Value.(string)
-			case "date":
-				x.Date = prop.Value.(time.Time)
+		case "author":
+			x.Author = prop.Value.(string)
+		case "content":
+			x.Content = prop.Value.(string)
+		case "date":
+			x.Date = prop.Value.(time.Time)
 		}
 	}
 	return datastore.LoadStruct(x, props)
