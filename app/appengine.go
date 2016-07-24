@@ -5,9 +5,9 @@ package main
 import (
 	"net/http"
 
-	"github.com/captaincodeman/clean/adapters/web"
-	"github.com/captaincodeman/clean/engine"
-	"github.com/captaincodeman/clean/providers/appengine"
+	"github.com/captaincodeman/clean-go/adapters/web"
+	"github.com/captaincodeman/clean-go/engine"
+	"github.com/captaincodeman/clean-go/providers/appengine"
 )
 
 // for appengine we don't use main to start the server

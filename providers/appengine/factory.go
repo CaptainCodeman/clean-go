@@ -3,7 +3,7 @@
 package appengine
 
 import (
-	"github.com/captaincodeman/clean/engine"
+	"github.com/captaincodeman/clean-go/engine"
 )
 
 type (

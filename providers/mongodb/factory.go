@@ -5,7 +5,7 @@ import (
 
 	"gopkg.in/mgo.v2"
 
-	"github.com/captaincodeman/clean/engine"
+	"github.com/captaincodeman/clean-go/engine"
 )
 
 type (

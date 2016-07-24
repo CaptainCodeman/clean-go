@@ -1,13 +1,14 @@
 # Clean Architecture in Go
 An example of "Clean Architecture" in Go to demonstrate developing a testable
-application that can be run on AppEngine or with traditional hosting and with
-Google Cloud Datastore or MongoDB for storage.
+application that can be run on AppEngine with Google Cloud Storage or with 
+traditional hosting and MongoDB for storage (but not limited to either).
 
 There are a number of different application architectures that are all simlar
 variations on the same theme which is to have clean separation of concerns and 
-dependecies that follow the best practices of "the dependency invesion principle":
+dependencies that follow the best practices of "the dependency invesion principle":
 
 A. High-level modules should not depend on low-level modules. Both should depend on abstractions.
+
 B. Abstractions should not depend on details. Details should depend on abstractions.
 
 Variations of the approach include:
@@ -20,7 +21,7 @@ From more in-depth practical application of many of the ideas I can strongly
 recommend the excellent book [Implementing Domain-Driven Design](http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577)
 by Vaughn Vernon that goes into far greater detail.
 
-Besides the clean codebase the approaches also bring other advantages - significant
+Besides the clean codebase, the approaches also bring other advantages - significant
 parts of the system can be unit tested quickly and easily without having to fire 
 up the full web stack, something that is often difficult when the dependencies 
 go the wrong way (if you need a database and a web-server running to make your 
@@ -31,21 +32,22 @@ more in Python. After switching languages again (yeah, right) to the wonderful
 world of go I came across a blog post which re-ignited my interest in it:
 [Applying The Clean Architecture to Go applications](http://manuel.kiessling.net/2012/09/28/applying-the-clean-architecture-to-go-applications/)
 
-It's a great read but I found the example a little overly-complex with the database
-code especially being a significant distraction and at the same time it was light
+It's a great read but I found the example a little overly-complex with too much of
+the focus on relational database model parts and at the same time it was light
 on some issues I wanted to resolve such as switching between different storage types
 and web UI or framework (and Go has so many of those to chose from!).
 
 I've also been looking for a way to make my application usable both standalone
-and on AppEngine as well as being easier to test so this seemed like a good opportunity
-to do some experimenting and this is what I came up with.
+and on AppEngine as well as being easier to test, so this seemed like a good opportunity
+to do some experimenting and this is what I came up with as a prototype which I've
+hopefully simplified to show the techniques.
 
 ## Dependency Rings
-We've all heard of n-tier or layered architecture, especially if youve' come 
+We've all heard of n-tier or layered architecture, especially if you've come 
 from the world of .NET or Java and it's unfair that it get's a bad rap. Probably
-because it was often so poorly implemented with the typical mistake of everything
+because it was often implemented so poorly with the typical mistake of everything
 relying on the database layer at the bottom which made software rigid, difficult
-to test and closely tied to the vendors database implementation (hardly surprising
+to test and closely tied to the vendor's database implementation (hardly surprising
 that they promoted it so hard).
 
 Reversing the dependencies though has a wonderful transformative effect on your 
@@ -98,18 +100,20 @@ of the business rules. I tend to call these "providers" because ... well, .NET.
 Within app folder ...
 
 ## App Engine
+Install the AppEngine SDK for Go:
 
     goapp serve
 
 ## Standalone
+Start mongodb and build / run the go app as normal:
 
     mongod --config /usr/local/etc/mongod.conf
     go run app.go
 
 ## Run Tests
+Not yet added
 
     ginkgo watch -cover domain
-
     go tool cover -html=domain/domain.coverprofile
 
 # Implementation Notes
@@ -118,7 +122,8 @@ Within app folder ...
 Go has build tags to control which code is included and when running on AppEngine
 the `appengine` tag is automatically applied. This provides an easy way to include
 or exclude code that will only work on one platform or the other. i.e. there is no
-point building the appengine provider into a standalone build.
+point building the appengine provider into a standalone build and some code can't
+be executed on appengine classic - this provides a way to keep things separated.
 
 ## Dependency Injection
 Surely it's needed for such a thing? No it isn't. While DI can be a useful tool,
@@ -166,4 +171,4 @@ Extensions to packages (e.g. `net/http` or `encoding/json`)
 
 3rd party packages (e.g. `google.golang.org/appengine/datastore`)
 
-Application packages (e.g. `github.com/captaincodeman/clean/domain`)
+Application packages (e.g. `github.com/captaincodeman/clean-go/domain`)

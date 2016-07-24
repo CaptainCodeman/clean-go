@@ -8,8 +8,8 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/appengine/datastore"
 
-	"github.com/captaincodeman/clean/domain"
-	"github.com/captaincodeman/clean/engine"
+	"github.com/captaincodeman/clean-go/domain"
+	"github.com/captaincodeman/clean-go/engine"
 )
 
 type (

@@ -5,7 +5,7 @@ package appengine
 import (
 	"google.golang.org/appengine/datastore"
 
-	"github.com/captaincodeman/clean/engine"
+	"github.com/captaincodeman/clean-go/engine"
 )
 
 // translateQuery converts an application query spec into 

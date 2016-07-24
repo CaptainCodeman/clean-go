@@ -3,7 +3,7 @@ package engine
 import (
 	"golang.org/x/net/context"
 
-	"github.com/captaincodeman/clean/domain"
+	"github.com/captaincodeman/clean-go/domain"
 )
 
 type (
