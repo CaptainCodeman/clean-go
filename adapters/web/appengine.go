@@ -8,6 +8,11 @@ import (
 	"google.golang.org/appengine"
 )
 
-func ctx(c *gin.Context) context.Context {
+// getContext provides the appengine context that
+// all of the appengine services rely on. Notice
+// the build tag that only includes this version
+// if we're running on appengine. The standalone
+// version is in standalong.go
+func getContext(c *gin.Context) context.Context {
 	return appengine.NewContext(c.Request)
 }

@@ -7,14 +7,14 @@ import (
 	"github.com/captaincodeman/clean/engine"
 )
 
+// translateQuery converts an application query spec into 
+// a mongodb specific query
 func translateQuery(c *mgo.Collection, query *engine.Query) *mgo.Query {
 	m := bson.M{}
 	for _, filter := range query.Filters {
 		switch filter.Condition {
 		case engine.Equal:
 			m[filter.Property] = filter.Value
-		case engine.NotEqual:
-			m[filter.Property] = bson.M{"$ne": filter.Value}
 		case engine.LessThan:
 			m[filter.Property] = bson.M{"$lt": filter.Value}
 		case engine.LessThanOrEqual:

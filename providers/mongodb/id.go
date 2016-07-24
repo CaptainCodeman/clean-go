@@ -6,7 +6,9 @@ import (
 )
 
 type (
-	Id struct {
+	// ID represents the last used integer
+	// id for any collection
+	ID struct {
 		Next int64 `bson:"n"`
 	}
 )
@@ -15,6 +17,7 @@ var (
 	idCollection = "id"
 )
 
+// simple way of using integer IDs with MongoDB
 func getNextSequence(s *mgo.Session, name string) int64 {
 	c := s.DB("").C(idCollection)
 	change := mgo.Change{
@@ -22,7 +25,7 @@ func getNextSequence(s *mgo.Session, name string) int64 {
 		Upsert:    true,
 		ReturnNew: true,
 	}
-	id := new(Id)
+	id := new(ID)
 	c.Find(bson.M{"_id": name}).Apply(change, id)
 	return id.Next
 }

@@ -8,6 +8,8 @@ import (
 	"github.com/captaincodeman/clean/engine"
 )
 
+// translateQuery converts an application query spec into 
+// an appengine datastore specific query
 func translateQuery(kind string, query *engine.Query) *datastore.Query {
 	q := datastore.NewQuery(kind)
 
@@ -15,8 +17,6 @@ func translateQuery(kind string, query *engine.Query) *datastore.Query {
 		switch filter.Condition {
 		case engine.Equal:
 			q = q.Filter(filter.Property + " =", filter.Value)
-		case engine.NotEqual:
-			q = q.Filter(filter.Property + " >", filter.Value)	// TODO
 		case engine.LessThan:
 			q = q.Filter(filter.Property + " <", filter.Value)
 		case engine.LessThanOrEqual:

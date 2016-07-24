@@ -2,58 +2,29 @@ package engine
 
 import (
 	"golang.org/x/net/context"
-
-	"github.com/captaincodeman/clean/domain"
 )
 
 type (
+	// Greeter is the interface for our interactor
 	Greeter interface {
+		// Add is the add-a-greeting use-case
 		Add(c context.Context, r *AddGreetingRequest) *AddGreetingResponse
+
+		// List is the list-the-greetings use-case
 		List(c context.Context, r *ListGreetingsRequest) *ListGreetingsResponse
 	}
 
+	// greeter implementation
 	greeter struct {
 		repository GreetingRepository
 	}
-
-	AddGreetingRequest struct {
-		Author  string
-		Content string
-	}
-
-	AddGreetingResponse struct {
-		ID int64
-	}
-
-	ListGreetingsRequest struct {
-		Count int
-	}
-
-	ListGreetingsResponse struct {
-		Greetings []*domain.Greeting
-	}
 )
 
-func NewGreeter(repository GreetingRepository) Greeter {
-	return &greeter{
-		repository: repository,
-	}
-}
+// NewGreeter creates a new Greeter interactor wired up
+// to use the greeter repository from the storage provider
+// that the engine has been setup to use.
 func (f *engineFactory) NewGreeter() Greeter {
-	return NewGreeter(f.NewGreetingRepository())
-}
-
-func (g *greeter) Add(c context.Context, r *AddGreetingRequest) *AddGreetingResponse {
-	greeting := domain.NewGreeting(r.Author, r.Content)
-	g.repository.Put(c, greeting)
-	return &AddGreetingResponse{
-		ID: greeting.ID,
-	}
-}
-
-func (g *greeter) List(c context.Context, r *ListGreetingsRequest) *ListGreetingsResponse {
-	q := NewQuery("greeting").Order("date", Descending).Slice(0, r.Count) // .Filter("author", core.NotEqual, "")
-	return &ListGreetingsResponse{
-		Greetings: g.repository.List(c, q),
+	return &greeter{
+		repository: f.NewGreetingRepository(),
 	}
 }

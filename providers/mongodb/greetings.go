@@ -13,17 +13,13 @@ type (
 	greetingRepository struct {
 		session *mgo.Session
 	}
-
-	greeting struct {
-		domain.Greeting
-	}
 )
 
 var (
 	greetingCollection = "greeting"
 )
 
-func NewGreetingRepository(session *mgo.Session) engine.GreetingRepository {
+func newGreetingRepository(session *mgo.Session) engine.GreetingRepository {
 	return &greetingRepository{session}
 }
 

@@ -14,14 +14,16 @@ type (
 	}
 )
 
+// NewStorage creates a new instance of this mongodb storage factory
 func NewStorage(url string) engine.StorageFactory {
 	session, _ := mgo.DialWithTimeout(url, 10*time.Second)
 	ensureIndexes(session)
 	return &storageFactory{session}
 }
 
+// NewGreetingRepository creates a new datastore greeting repository
 func (f *storageFactory) NewGreetingRepository() engine.GreetingRepository {
-	return NewGreetingRepository(f.session)
+	return newGreetingRepository(f.session)
 }
 
 func ensureIndexes(s *mgo.Session) {

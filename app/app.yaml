@@ -1,4 +1,3 @@
-application: clean
 module: default
 version: alpha
 runtime: go

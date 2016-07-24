@@ -10,6 +10,9 @@ import (
 	"github.com/captaincodeman/clean/providers/mongodb"
 )
 
+// when running in traditional or 'standalone' mode
+// we're going to use MongoDB as the storage provider
+// and start the webserver running ourselves. 
 func main() {
 	s := mongodb.NewStorage(config.MongoURL)
 	e := engine.NewEngine(s)
