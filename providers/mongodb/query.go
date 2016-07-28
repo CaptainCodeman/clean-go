@@ -7,7 +7,7 @@ import (
 	"github.com/captaincodeman/clean-go/engine"
 )
 
-// translateQuery converts an application query spec into 
+// translateQuery converts an application query spec into
 // a mongodb specific query
 func translateQuery(c *mgo.Collection, query *engine.Query) *mgo.Query {
 	m := bson.M{}
