@@ -44,7 +44,7 @@ hopefully simplified to show the techniques.
 
 ## Dependency Rings
 We've all heard of n-tier or layered architecture, especially if you've come 
-from the world of .NET or Java and it's unfair that it gets a bad rap. Probably
+from the world of .NET or Java and it's unfair that it gets a bad rep. Probably
 because it was often implemented so poorly with the typical mistake of everything
 relying on the database layer at the bottom which made software rigid, difficult
 to test and closely tied to the vendor's database implementation (hardly surprising
