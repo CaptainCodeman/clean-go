@@ -44,7 +44,7 @@ hopefully simplified to show the techniques.
 
 ## Dependency Rings
 We've all heard of n-tier or layered architecture, especially if you've come 
-from the world of .NET or Java and it's unfair that it get's a bad rap. Probably
+from the world of .NET or Java and it's unfair that it gets a bad rap. Probably
 because it was often implemented so poorly with the typical mistake of everything
 relying on the database layer at the bottom which made software rigid, difficult
 to test and closely tied to the vendor's database implementation (hardly surprising
@@ -70,7 +70,7 @@ enforced.
 ### Engine / Use-Cases
 The application level rules and use-cases orchestrate the domain model and add richer
 rules and logic including persistence. I prefer the term engine for this package 
-becase it is the engine of what the app actually does. The rules implemented at this
+because it is the engine of what the app actually does. The rules implemented at this
 level should not affect the domain model rules but obviously may depend on them. 
 The rules of the application also shouldn't rely on the UI or the persistence 
 frameworks being used.
